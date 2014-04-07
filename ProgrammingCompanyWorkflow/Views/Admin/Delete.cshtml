@@ -1,0 +1,39 @@
+﻿@model ProgrammingCompanyWorkflow.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Удалить пользователя";
+}
+
+<h2>Удалить пользователя</h2>
+
+<h3>Вы уверены, что хотите удалить пользователя?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Логин пользователя
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            Роль пользователя
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Roles.ToList()[0].Role.Name)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-danger" /> |
+            @Html.ActionLink("К списку пользователей", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

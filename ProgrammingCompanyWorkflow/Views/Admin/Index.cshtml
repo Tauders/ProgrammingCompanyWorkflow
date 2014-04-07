@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ProgrammingCompanyWorkflow.Models.ApplicationUser>
+@{
+    ViewBag.Title = "Список пользователей";
+}
+
+<h2>Список пользователей</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Логин пользователя
+            </th>
+            <th>
+                Роль пользователя
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Roles.ToList()[0].Role.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Изменить", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNet.Identity
+@model ProgrammingCompanyWorkflow.Models.Project
+
+@{
+    ViewBag.Title = "Удалить проект";
+}
+
+<h2>Удалить проект</h2>
+
+<h3>Вы уверены, что хотите удалить этот проект?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Тема ТЗ
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            Тело ТЗ
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Body)
+        </dd>
+
+        <dt>
+            Время создания
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatingTime)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-danger" /> |
+            @Html.ActionLink("К списку проектов", "Index", new { id = User.Identity.GetUserId() }, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

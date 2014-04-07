@@ -1,0 +1,60 @@
+﻿@using System.Web.UI.WebControls
+@using Microsoft.AspNet.Identity
+@model IEnumerable<ProgrammingCompanyWorkflow.Models.Project>
+
+@{
+    ViewBag.Title = "Проекты, к которым вы имеете отношения";
+}
+
+<h2>Проекты, к которым вы имеете отношения</h2>
+
+<p>
+    @Html.ActionLink("Создать проект", "Create")
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentResponseUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModifyTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr @if(User.Identity.GetUserId()==item.CreatingUser.Id){
+                    @:style="font-weight: bold"
+                }>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurrentResponseUser.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastModifyTime)
+                </td>
+                <td>
+                    @if (item.CurrentResponseUser.Id == User.Identity.GetUserId())
+                    {
+                        @Html.ActionLink("Изменить", "Edit", new {id = item.Id}) @:|
+                        @Html.ActionLink("Переслать", "Change", new {id = item.Id}) @:|
+                    }
+                    @Html.ActionLink("Подробнее", "Details", new { id=item.Id }) 
+                    @if (item.CreatingTime == item.LastModifyTime)
+                    {
+                    @:|
+                        @Html.ActionLink("Удалить", "Delete", new {id = item.Id})
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

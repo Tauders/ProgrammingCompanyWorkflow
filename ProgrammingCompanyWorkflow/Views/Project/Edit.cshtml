@@ -1,0 +1,127 @@
+﻿@using Microsoft.Ajax.Utilities
+@using Microsoft.AspNet.Identity
+@using ProgrammingCompanyWorkflow.Models
+@model ProgrammingCompanyWorkflow.Models.Project
+
+@{
+    ViewBag.Title = "Изменить проект";
+}
+
+<h2>Изменить проект</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Body, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Body, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Body)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comment, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Comment, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Comment)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="control-label col-md-2">
+                <label>Необходимые компоненты</label>
+                <br /><a href="#" id="Add">Добавить...</a>
+            </div>
+
+            <div class="col-md-10" id="adding">
+                @{
+                    int i = 0;
+                    foreach (var temp in Model.ProjectComponents)
+                    {
+                        var test= new List<SelectListItem>();
+                        foreach (var selectListItem in (List<Component>)ViewBag.ListOfComponent)
+                        {
+                            test.Add(new SelectListItem() { Text = selectListItem.Name, Value = selectListItem.Id.ToString(), Selected = selectListItem == temp.Component });
+                        }
+                        var txt = "btn" + i;
+                            <div style="height: 40px;">
+                                @Html.DropDownList("ProjectComponents[" + i + "].Component.Id", test,
+                                String.Empty, new { @class = "form-control", @style = "float:left; margin-right:5px;"})
+                                @Html.TextBox("ProjectComponents[" + i + "].Count", temp.Count, new { @placeholder = "Количество компонентов", @style = "float:left; margin-right:5px;", @class = "form-control", @min="0"})
+                                @Html.Hidden("ProjectComponents[" + i + "].Id",temp.Id.ToString())
+                                <a id="@txt" href="#" class="btn btn-danger">X</a>
+                            </div>
+                        i++;
+                    }
+                    <div id="count" hidden="hidden">@i</div>
+                }
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Сохранить" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("К списку проектов", "Index", new { id = User.Identity.GetUserId() })
+</div>
+
+<div id="stuff_you_want" hidden="hidden">@Html.DropDownList("ComponentId", null, String.Empty, new { @class = "form-control", @style = "float:left; margin-right:5px;" })</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    $().ready(function () {
+        var count = parseInt($("#count").html());
+        
+        for (var j = 0; j < count; j++) {
+            $('#btn' + j + '').click(function () {
+                $(this).parent().hide();
+                $(this).parent().children("input:first").val("-1");
+            });
+            //alert(j);
+            
+            //alert($("input[name='ProjectComponents[" + j + "].Count']").val());
+        }
+        $("form").validate();
+    });
+    $("#Add").click(function () {
+        var count = parseInt($("#count").html());
+        var test = $("#stuff_you_want").html();
+        test = test.replace(/ComponentId/g, "ProjectComponents[" + count + "].Component.Id");
+        var texttemp = '<div style="height:40px">' + test
+            + '<input placeholder="Количество компонентов" style="float:left; margin-right:5px;" type="text" value="" class="form-control" name="ProjectComponents['
+            + count + '].Count"/><a id="btn' + count + '" href="#" class="btn btn-danger">X</a> </div>';
+        $("#adding").append(texttemp);
+
+        $('#btn' + count + '').click(function () {
+            $(this).parent().hide();
+            $('input[name="ProjectComponents[' + count + '].Count"]').val("-1");
+        });
+
+        $("#count").html(count + 1);
+    });
+</script>

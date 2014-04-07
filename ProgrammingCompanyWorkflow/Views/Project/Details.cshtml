@@ -1,0 +1,96 @@
+﻿@using Microsoft.AspNet.Identity
+@model ProgrammingCompanyWorkflow.Models.Project
+
+@{
+    ViewBag.Title = "Подробности о проекте";
+}
+
+<h2>Подробности о проекте</h2>
+
+<div>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Тема ТЗ
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            Тело ТЗ
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Body)
+        </dd>
+        
+        <dt>
+            Комментарии
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+        
+        <dt>
+            Время создания
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatingTime)
+        </dd>
+        
+        <dt>
+            Время последнего изменения
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastModifyTime)
+        </dd>
+
+        <dt>
+            Кто создал ТЗ
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatingUser.UserName)
+        </dd>
+        
+        <dt>
+            Текущий ответственный
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentResponseUser.UserName)
+        </dd>
+
+        <dt>
+            Текущие копмоненты
+        </dt>
+
+        <dd>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Компонент</th><th>Число компонентов</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var source in (List<ProgrammingCompanyWorkflow.Models.ProjectComponent>) ViewBag.ListOfComponent)
+                        {
+                            <tr><td>@source.Component.Name</td><td>@source.Count</td></tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </dd>
+        
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Изменить", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("К списку проектов", "Index", new { id = User.Identity.GetUserId() })
+</p>

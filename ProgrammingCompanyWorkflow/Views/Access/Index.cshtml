@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ProgrammingCompanyWorkflow.Models.Access>
+
+@{
+    ViewBag.Title = "Список путей";
+}
+
+<h2>Список путей</h2>
+<h4>Отображает от какой роли можно отправить ТЗ к какой</h4>
+<p>
+    @Html.ActionLink("Добавить путь", "Create")
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>От роли</th>
+            <th>К роли</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.FromRole.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.ToRole.Name)</td>
+                <td>
+                    @Html.ActionLink("Изменить", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,95 @@
+﻿@using Microsoft.AspNet.Identity
+@using ProgrammingCompanyWorkflow.Models
+@model ProgrammingCompanyWorkflow.Models.TemporalClass
+
+@{
+    ViewBag.Title = "Добавить новый проект";
+}
+
+<h2>Добавить новый проект</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Project.Name, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Project.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Project.Name)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Project.Body, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Project.Body, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Project.Body)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Project.Comment, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Project.Comment, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Project.Comment)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-2">
+                    <label>Необходимые компоненты</label>
+                    <br/><a href="#" id="Add">Добавить...</a>
+                </div>
+                
+                <div class="col-md-10" id="adding">
+                    
+                </div>
+                
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Создать" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("К списку проектов", "Index", new { id = User.Identity.GetUserId() })
+</div>
+
+<div id="stuff_you_want" hidden="hidden">@Html.DropDownList("ComponentId", null, String.Empty, new { @class = "form-control", @style = "float:left; margin-right:5px;" })</div>
+<div id="count" hidden="hidden">0</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    $("#Add").click(function () {
+        var count = parseInt($("#count").html());
+        var test = $("#stuff_you_want").html();
+        test = test.replace(/ComponentId/g, "ProjectComponents["+count+"].ComponentId");
+        var texttemp = '<div style="height:40px">' + test +
+            '<input placeholder="Количество компонентов" style="float:left; margin-right:5px;" type="text" value="" class="form-control" name="ProjectComponents['
+            + count + '].CountView"/><a id="btn' + count + '" href="#" class="btn btn-danger">X</a> </div>';
+
+        $("#adding").append(texttemp);
+        
+        $('#btn' + count + '').click(function () {
+            $(this).parent().hide();
+            $('input[name="ProjectComponents[' + count + '].CountView"]').val("-1");
+        });
+        
+        $("#count").html(count + 1);
+    });
+</script>

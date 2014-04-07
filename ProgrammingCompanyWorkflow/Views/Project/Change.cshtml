@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNet.Identity
+@model ProgrammingCompanyWorkflow.Models.Project
+
+@{
+    ViewBag.Title = "Переслать следующему участнику";
+}
+
+<h2>Переслать следующему участнику</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+        
+        <div class="form-group">
+            <div class = "control-label col-md-2"> Кому переслать </div>
+            <div class="col-md-10">
+                @Html.DropDownList("Roles", null, String.Empty, new { @class = "form-control" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Переслать" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("К списку проектов", "Index", new { id = User.Identity.GetUserId() })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
